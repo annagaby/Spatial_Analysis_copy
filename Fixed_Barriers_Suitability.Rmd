@@ -1,0 +1,198 @@
+---
+title: "Fixed_Barriers_Suitability"
+author: "Eva Marrero and Caio"
+date: "November 19, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+MPAs
+```{r}
+# Read in file
+mpas_binary <- raster(paste0(path,"/mpas_binary.tif"))
+
+# Plot
+plot(mpas_binary)
+
+# Make df
+mpas_binary_df <- as.data.frame(mpas_binary, xy = T)
+
+# Graph with Brazil's outline
+mpas_binary_graph <- ggplot() +
+    geom_raster(data = mpas_binary_df,
+                mapping = aes(x = x, y = y, fill = as.factor(mpas_binary))) +
+    geom_sf(data = bound_BRA, fill = "#DCDBE0") +
+  scale_fill_manual(
+    name = "", # Gives an empty title for the legend
+    labels = c("Exclusive Economic Zone", "Suitable", ""),
+    values = c("#EFEFEF", "#0077e6")) +
+  theme_void() +
+  theme(panel.grid.major = element_line(color = "white"))
+
+mpas_binary_graph
+
+```
+
+Reefs
+```{r}
+# Read in file
+reefs_binary <- raster(paste0(path,"/reefs_binary.tif"))
+
+# Plot
+plot(reefs_binary)
+
+# Make df
+reefs_binary_df <- as.data.frame(reefs_binary, xy = T)
+
+# Graph with Brazil's outline
+reefs_binary_graph <- ggplot() +
+    geom_raster(data = reefs_binary_df,
+                mapping = aes(x = x, y = y, fill = as.factor(reefs_binary))) +
+    geom_sf(data = bound_BRA, fill = "#DCDBE0") +
+  scale_fill_manual(
+    name = "", # Gives an empty title for the legend
+    labels = c("Exclusive Economic Zone", "Suitable", ""),
+    values = c("#EFEFEF", "#0077e6")) +
+  theme_void() +
+  theme(panel.grid.major = element_line(color = "white"))
+
+reefs_binary_graph
+
+```
+
+Artificial Reefs
+```{r}
+# Read in file
+reefs_artificial_binary <- raster(paste0(path,"/reefs_artificial_binary.tif"))
+
+# Plot
+plot(reefs_artificial_binary)
+
+# Make df
+reefs_artificial_binary_df <- as.data.frame(reefs_artificial_binary, xy = T)
+
+# Graph with Brazil's outline
+reefs_artificial_binary_graph <- ggplot() +
+    geom_raster(data = reefs_artificial_binary_df,
+                mapping = aes(x = x, y = y, fill = as.factor(reefs_artificial_binary))) +
+    geom_sf(data = bound_BRA, fill = "#DCDBE0") +
+  scale_fill_manual(
+    name = "", # Gives an empty title for the legend
+    labels = c("Exclusive Economic Zone", "Suitable", ""),
+    values = c("#EFEFEF", "#0077e6")) +
+  theme_void() +
+  theme(panel.grid.major = element_line(color = "white"))
+
+reefs_artificial_binary_graph
+
+```
+
+
+Wetlands (not using in presentation)
+```{r}
+# Read in file
+wetlands_binary <- raster(paste0(path,"/wetlands_binary.tif"))
+
+# Plot
+plot(wetlands_binary)
+
+```
+
+Oil pipelines
+```{r}
+# Read in file
+og_pipeline_binary <- raster(paste0(path,"/og_pipeline_binary.tif"))
+
+# Plot
+plot(og_pipeline_binary)
+
+# Make df
+og_pipeline_binary_df <- as.data.frame(og_pipeline_binary, xy = T)
+
+# Graph with Brazil's outline
+og_pipeline_binary_graph <- ggplot() +
+    geom_raster(data = og_pipeline_binary_df,
+                mapping = aes(x = x, y = y, fill = as.factor(og_pipeline_binary))) +
+    geom_sf(data = bound_BRA, fill = "#DCDBE0") +
+  scale_fill_manual(
+    name = "", # Gives an empty title for the legend
+    labels = c("Exclusive Economic Zone", "Suitable", ""),
+    values = c("#EFEFEF", "#0077e6")) +
+  theme_void() +
+  theme(panel.grid.major = element_line(color = "white"))
+
+og_pipeline_binary_graph
+
+
+```
+
+Oil production
+```{r}
+# Read in file
+og_production_binary <- raster(paste0(path,"/og_production_binary.tif"))
+
+# Plot
+plot(og_production_binary)
+
+# Make df
+og_production_binary_df <- as.data.frame(og_production_binary, xy = T)
+
+# Graph with Brazil's outline
+og_production_binary_graph <- ggplot() +
+    geom_raster(data = og_production_binary_df,
+                mapping = aes(x = x, y = y, fill = as.factor(og_production_binary))) +
+    geom_sf(data = bound_BRA, fill = "#DCDBE0") +
+  scale_fill_manual(
+    name = "", # Gives an empty title for the legend
+    labels = c("Exclusive Economic Zone", "Suitable", ""),
+    values = c("#EFEFEF", "#0077e6")) +
+  theme_void() +
+  theme(panel.grid.major = element_line(color = "white"))
+
+og_production_binary_graph
+
+```
+
+Shipping lanes
+```{r}
+# Read in file
+shipping_binary <- raster(paste0(path,"/shipping_binary.tif"))
+
+# Plot
+plot(shipping_binary)
+
+# Make df
+shipping_binary_df <- as.data.frame(shipping_binary, xy = T)
+
+# Graph with Brazil's outline
+shipping_binary_graph <- ggplot() +
+    geom_raster(data = shipping_binary_df,
+                mapping = aes(x = x, y = y, fill = as.factor(shipping_binary))) +
+    geom_sf(data = bound_BRA, fill = "#DCDBE0") +
+  scale_fill_manual(
+    name = "", # Gives an empty title for the legend
+    labels = c("Exclusive Economic Zone", "Suitable", ""),
+    values = c("#EFEFEF", "#0077e6")) +
+  theme_void() +
+  theme(panel.grid.major = element_line(color = "white"))
+
+shipping_binary_graph
+```
+
+
+
+Suitable areas
+```{r}
+# Overlay all layers
+# Note: they all need to have the same extent and resolution
+suitable_fixed <- overlay(mpas_binary, reefs_binary, reefs_artificial_binary, og_pipeline_binary, og_production_binary, wetlands_binary, fun = function(a, b, c, d, e, f){a*b*c*d*e*f})
+
+# Plot suitable areas
+plot(suitable_fixed)
+map('world', fill = T, add = T, col = 'gray')
+
+```
+

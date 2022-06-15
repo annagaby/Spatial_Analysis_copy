@@ -1,0 +1,114 @@
+---
+title: "Sensitivity_Analysis"
+author: "Anna Calle"
+date: "3/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load required libraries
+library(tidyverse)
+```
+
+Path to sensitivity analysis folder
+```{r}
+# Create a Root to Extract Files 
+if(Sys.info()["sysname"] == "Windows"){ #If operating system is "Windows" use G: Drive
+  team_path <- "G:/"
+} else { # If it is not (i.e. Mac), use the Google Drive File Stream
+  team_path <- "/Volumes/GoogleDrive/"
+}
+
+#Create the Full File Path
+path <- paste0(team_path, "Shared drives/Bren GP 2020 maricultura/Data/Raw_Data/Active_Data_Layers/Sensitivity_Analysis")
+
+```
+
+Fish Price Sensitivity with farm number constant at 1 farm
+```{r}
+# Read in raster files using different prices
+# Note: price_8 refers to a fish price of $8.6
+price_7 <- raster(paste0(path,"/econ_p_7.tif"))
+price_8 <- raster(paste0(path,"/econ_p_8.tif"))
+price_10 <- raster(paste0(path,"/econ_p_10.tif"))
+price_12 <- raster(paste0(path,"/econ_p_12.tif"))
+```
+
+Create summaries for each raster to obtain min and max
+```{r}
+summary_7 <- summary(price_7)
+summary_7
+
+summary_8 <- summary(price_8)
+summary_8
+
+summary_10 <- summary(price_10)
+summary_10
+
+summary_12 <- summary(price_12)
+summary_12
+```
+
+Means of each raster
+```{r}
+mean_7 <- cellStats(price_7, 'mean')
+mean_8 <- cellStats(price_8, 'mean')
+mean_10 <- cellStats(price_10, 'mean')
+mean_12 <- cellStats(price_12, 'mean')
+```
+
+Farm Sensitivity with fish price constant at $8.6
+```{r}
+# Read in raster files using different prices
+# Note: price_8 refers to a fish price of $8.6
+farm_1 <- raster(paste0(path,"/econ_f_1.tif"))
+farm_12 <- raster(paste0(path,"/econ_f_12.tif"))
+farm_60 <- raster(paste0(path,"/econ_f_60.tif"))
+farm_120 <- raster(paste0(path,"/econ_f_120.tif"))
+```
+
+Create summaries for each raster to obtain min and max
+```{r}
+summary_f_1 <- summary(farm_1)
+summary_f_1
+
+summary_f_12 <- summary(farm_12)
+summary_f_12
+
+summary_f_60 <- summary(farm_60)
+summary_f_60
+
+summary_f_120 <- summary(farm_120)
+summary_f_120
+```
+
+Means of each raster
+```{r}
+mean_f_1 <- cellStats(farm_1, 'mean')
+mean_f_12 <- cellStats(farm_12, 'mean')
+mean_f_60 <- cellStats(farm_60, 'mean')
+mean_f_120 <- cellStats(farm_120, 'mean')
+```
+
+Feed Price Sensitivity with farm number constant at 1 farm, and fish price of $8.5
+```{r}
+# Read in raster files using different prices
+# Note: price_8 refers to a fish price of $8.6
+price_feed_252 <- raster(paste0(path,"/econ_feed_252.tif"))
+```
+
+Create summaries for each raster to obtain min and max
+```{r}
+summary_feed_252 <- summary(price_feed_252)
+summary_feed_252
+```
+
+Means of each raster
+```{r}
+mean_feed_252 <- cellStats(price_feed_252, 'mean')
+```
+

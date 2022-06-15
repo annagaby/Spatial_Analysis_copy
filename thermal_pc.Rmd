@@ -1,0 +1,44 @@
+---
+title: "thermal_pc"
+author: "Anna Calle"
+date: "2/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+Piecewise functions 
+```{r}
+# Define coefficients for cobia 0.0714,-0.1667, -1.5714, 5.3333
+a1 = 0.0714
+a2 = -0.1667
+b1 = -1.5714
+b2 <- 5.3333
+t0 <- 29
+
+# Piecewise function
+fun <- function (t){
+  ifelse(t<29, a1*t + b1, a2*t + b2)
+}
+
+# Plot
+plot_fun <- ggplot(data.frame(t = 15:35), aes(x = t)) +
+  stat_function(fun = fun, n = 1000) +
+  theme_classic() +
+  scale_x_continuous(expand = c(0,0),
+                     breaks = seq(from = 0, to = 35, by = 5),
+                     limits = c(15,35.5)) +
+  scale_y_continuous(expand = c(0,0),
+                      breaks = seq(from = 0, to = 0.6, by = 0.1),
+                     limits = c(0,0.62)) +
+  xlab("Temperature (C°)") +
+  ylab("Growth rate (kg/month)") +
+  theme(text = element_text(size=15))
+
+plot_fun
+```
+
